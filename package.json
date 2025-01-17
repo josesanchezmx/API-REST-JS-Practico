@@ -11,5 +11,8 @@
     "url": "(https://github.com/josesanchezmx/API-REST-JS-Practico.git)"
   },
   "author": "@JoseSanchez",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
+  }
 }
