@@ -21,7 +21,7 @@ const  lazyLoader =  new IntersectionObserver((entries) => {
     });
 });
 
-function createMovies(movies, container) {
+function createMovies(movies, container, lazyLoad = false) {
     container.innerHTML = '';
     movies.forEach(movie => {
 
@@ -34,9 +34,11 @@ function createMovies(movies, container) {
         const movieImg = document.createElement('img');
         movieImg.classList.add('movie-img');
         movieImg.setAttribute('alt', movie.title);
-        movieImg.setAttribute('data-img','https://image.tmdb.org/t/p/w300'+ movie.poster_path);
+        movieImg.setAttribute(lazyLoad ? 'data-img': 'src','https://image.tmdb.org/t/p/w300'+ movie.poster_path);
 
-        lazyLoader.observe(movieImg);
+        if (lazyLoad) {
+            lazyLoader.observe(movieImg);
+        }
 
         movieContainer.appendChild(movieImg);
         container.appendChild(movieContainer);
@@ -81,7 +83,7 @@ function createCategories(categories, container) {
 async function getTrendingMoviesPreview(){
     const {data} = await api('trending/movie/day');
     const movies = data.results;
-    createMovies(movies, trendingMoviesPreviewList);
+    createMovies(movies, trendingMoviesPreviewList, true);
 }
 
 // lista de categorias de peiculas
