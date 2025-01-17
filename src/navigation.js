@@ -1,6 +1,6 @@
 searchFormBtn.addEventListener('click', () => {
 
-  location.hash = '#search='+ searchFormInput.value;
+  location.hash = '#search=' + searchFormInput.value;
 });
 trendingBtn.addEventListener('click', () => {
   location.hash = '#trends';
@@ -69,22 +69,22 @@ function categoriesPage() {
   genericSection.classList.remove('inactive');
   movieDetailSection.classList.add('inactive');
 
- // ['#category', 'id-name']
- const [_, categoryData] = location.hash.split('=');
- const [categoryId, categoryName] = categoryData.split('-');
+  // ['#category', 'id-name']
+  const [_, categoryData] = location.hash.split('=');
+  const [categoryId, categoryName] = categoryData.split('-');
 
- // Decodificar el nombre de la categoría
- const decodedCategoryName = decodeURIComponent(categoryName);
+  // Decodificar el nombre de la categoría
+  const decodedCategoryName = decodeURIComponent(categoryName);
 
- headerCategoryTitle.innerHTML = decodedCategoryName;
+  headerCategoryTitle.innerHTML = decodedCategoryName;
 
- // Limpiar el contenedor antes de agregar nuevas películas
- genericSection.innerHTML = '';
+  // Limpiar el contenedor antes de agregar nuevas películas
+  genericSection.innerHTML = '';
 
- getMoviesByCategory(categoryId);
+  getMoviesByCategory(categoryId);
 
- // Desplazarse al inicio
- scrollTop();
+  // Desplazarse al inicio
+  scrollTop();
 }
 
 function movieDetailsPage() {
@@ -101,6 +101,10 @@ function movieDetailsPage() {
   categoriesPreviewSection.classList.add('inactive');
   genericSection.classList.add('inactive');
   movieDetailSection.classList.remove('inactive');
+
+  // ['#movie', '2314']
+  const [_, movieId] = location.hash.split('=');
+  getMovieById(movieId);
   
 }
 function searchPage() {
@@ -122,7 +126,7 @@ function searchPage() {
   const [_, query] = location.hash.split('=');
   getMoviesBySearch(query);
 
-  
+
 }
 function trendsPage() {
   console.log("TRENDS!!")
