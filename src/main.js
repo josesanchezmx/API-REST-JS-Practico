@@ -121,32 +121,46 @@ async function getMoviesBySearch(query) {
   
     createMovies(movies, genericSection);
   }
+ 
 
-async function getTrendingMovies(){
-    const {data} = await api('trending/movie/day');
-    const movies = data.results;
-    createMovies(movies, genericSection, {lazyLoad: true, clean: false});   
+  async function getTrendingMovies() {
+      const { data } = await api('trending/movie/day');
+      const movies = data.results;
+      createMovies(movies, genericSection, { lazyLoad: true, clean: false });
+  
+      // Agregar el eventListener para el scroll infinito
+      window.addEventListener('scroll', handleScroll);
+  }
+  
+  async function getPaginatedTreindingMovies() {
+      // Incrementar la página para cargar la siguiente
+      page++;
+  
+      const { data } = await api('trending/movie/day', {
+          params: {
+              page,
+          },
+      });
+      const movies = data.results;
+      createMovies(movies, genericSection, { lazyLoad: true, clean: false }); 
+  }
+  
+  function handleScroll() {
+        const scrollPosition = window.scrollY + window.innerHeight;  
+        const bottomPosition = document.documentElement.scrollHeight;  
 
-    const btnLoadMore = document.createElement('button');
-    btnLoadMore.innerHTML = 'Load More';
-    btnLoadMore.addEventListener('click', getPaginatedTreindingMovies);
-    genericSection.appendChild(btnLoadMore);
-}
-let page =  1;
-async function getPaginatedTreindingMovies(){
-    const {data} = await api('trending/movie/day', {
-        params: {
-            page: 2,
-        },
-    });
-    const movies = data.results;
-    createMovies(movies, genericSection, {lazyLoad: true, clean: false});
-
-    const btnLoadMore = document.createElement('button');
-    btnLoadMore.innerHTML = 'Load More';
-    btnLoadMore.addEventListener('click', getPaginatedTreindingMovies);
-    genericSection.appendChild(btnLoadMore);
-}
+  
+      // Si el usuario está cerca del final de la página, cargar más películas
+      if (scrollPosition >= bottomPosition - 100) {  // 100px antes de llegar al final
+          window.removeEventListener('scroll', handleScroll);  // Remover el listener para evitar múltiples solicitudes
+  
+          // Cargar más películas y luego agregar el listener nuevamente
+          getPaginatedTreindingMovies().then(() => {
+              window.addEventListener('scroll', handleScroll);  // Volver a agregar el listener
+          });
+      }
+  }
+  
 
 async function getMovieById(id){
     const {data: movie} = await api('movie/'+ id);
