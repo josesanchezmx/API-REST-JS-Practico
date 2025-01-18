@@ -21,8 +21,11 @@ const  lazyLoader =  new IntersectionObserver((entries) => {
     });
 });
 
-function createMovies(movies, container, lazyLoad = false) {
-    container.innerHTML = '';
+function createMovies(movies, container, {lazyLoad = false, clean = true,} = {},) {
+    if(clean) {
+        container.innerHTML = '';
+    }
+
     movies.forEach(movie => {
         const movieImgUrl = movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'https://static.platzi.com/static/images/error/img404.png';
         const movieContainer = document.createElement('div');   
@@ -122,7 +125,27 @@ async function getMoviesBySearch(query) {
 async function getTrendingMovies(){
     const {data} = await api('trending/movie/day');
     const movies = data.results;
-    createMovies(movies, genericSection);
+    createMovies(movies, genericSection, {lazyLoad: true, clean: false});   
+
+    const btnLoadMore = document.createElement('button');
+    btnLoadMore.innerHTML = 'Load More';
+    btnLoadMore.addEventListener('click', getPaginatedTreindingMovies);
+    genericSection.appendChild(btnLoadMore);
+}
+let page =  1;
+async function getPaginatedTreindingMovies(){
+    const {data} = await api('trending/movie/day', {
+        params: {
+            page: 2,
+        },
+    });
+    const movies = data.results;
+    createMovies(movies, genericSection, {lazyLoad: true, clean: false});
+
+    const btnLoadMore = document.createElement('button');
+    btnLoadMore.innerHTML = 'Load More';
+    btnLoadMore.addEventListener('click', getPaginatedTreindingMovies);
+    genericSection.appendChild(btnLoadMore);
 }
 
 async function getMovieById(id){
