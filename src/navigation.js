@@ -1,5 +1,4 @@
-let page = 1;
-
+ let page = 1;
 searchFormBtn.addEventListener('click', () => {
   location.hash = '#search=' + searchFormInput.value;
 });
