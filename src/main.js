@@ -24,9 +24,10 @@ const  lazyLoader =  new IntersectionObserver((entries) => {
 function createMovies(movies, container, lazyLoad = false) {
     container.innerHTML = '';
     movies.forEach(movie => {
-
-        const movieContainer = document.createElement('div');
+        const movieImgUrl = movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'https://static.platzi.com/static/images/error/img404.png';
+        const movieContainer = document.createElement('div');   
         movieContainer.classList.add('movie-container');
+        
         movieContainer.addEventListener('click', () => {
             location.hash = `#movie=${movie.id}`;
         });
@@ -34,7 +35,7 @@ function createMovies(movies, container, lazyLoad = false) {
         const movieImg = document.createElement('img');
         movieImg.classList.add('movie-img');
         movieImg.setAttribute('alt', movie.title);
-        movieImg.setAttribute(lazyLoad ? 'data-img': 'src','https://image.tmdb.org/t/p/w300'+ movie.poster_path);
+        movieImg.setAttribute(lazyLoad ? 'data-img': 'src', movieImgUrl);
 
         if (lazyLoad) {
             lazyLoader.observe(movieImg);
@@ -103,7 +104,7 @@ async function getMoviesByCategory(id) {
       },
     });
     const movies = data.results;
-    createMovies(movies, genericSection);
+    createMovies(movies, genericSection, true);
 }
 
 // logica de getMoviesBySearch
