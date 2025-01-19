@@ -1,4 +1,5 @@
 // creacion de una instacia en axios  para hacer peticiones a la api y migrar el fetch a axios
+//Data
 const api = axios.create({
     baseURL: 'https://api.themoviedb.org/3',
     headers:{
@@ -9,6 +10,36 @@ const api = axios.create({
     },
 });
 
+function likedMoviesList() {
+    const item = JSON.parse(localStorage.getItem('liked_movies'));
+    let movies;
+  
+    if (item) {
+      movies = item;
+    } else {
+      movies = {};
+    }
+    
+    return movies;
+  }
+  
+  function likeMovie(movie) {
+    // movie.id
+    const likedMovies = likedMoviesList();
+  
+    console.log(likedMovies)
+    
+    if (likedMovies[movie.id]) {
+      likedMovies[movie.id] = undefined;
+    } else {
+      likedMovies[movie.id] = movie;
+    }
+  
+    localStorage.setItem('liked_movies', JSON.stringify(likedMovies));
+    getTrendingMoviesPreview()
+    getLikedMovies()
+  }
+  
 // Utils
 //lazy loader
 
@@ -35,34 +66,33 @@ function createMovies(movies, container, {lazyLoad = false, clean = true,} = {},
         movieImg.classList.add('movie-img');
         movieImg.setAttribute('alt', movie.title);
         movieImg.setAttribute(lazyLoad ? 'data-img': 'src', movieImgUrl);
-
-        //Agregar evento para redirigir al detalle de la película
+        
         movieImg.addEventListener('click', () => {
             location.hash = `#movie=${movie.id}`
         });
 
-        // Aquí deberías guardar la película en Local Storage
-        movieBtn.addEventListener('click', () => {
-            movieBtn.classList.toggle('movie-btn--liked');
-            // Aquí deberías guardar la película en Local Storage
+        movieImg.addEventListener('click', () => {
+            location.hash = `#movie=${movie.id}`;
         });
 
         const movieBtn = document.createElement('button');
         movieBtn.classList.add('movie-btn');
+        likedMoviesList()[movie.id] && movieBtn.classList.add('movie-btn--liked')
         movieBtn.addEventListener('click', () => {
-            movieBtn.classList.toggle('movie-btn--liked')
-            //DEVERIAMOS AGREGAR LA PELICULA A LOCAL STORAGE
+        movieBtn.classList.toggle('movie-btn--liked')
+         
+        likeMovie(movie);
 
-        });
-          // CAMBIO: Verificar si lazyLoad está habilitado y observar la imagen
-          if (lazyLoad) {
+        })
+
+        if (lazyLoad) {
             lazyLoader.observe(movieImg);
         }
 
-        // Añadir elementos al contenedor de la película
         movieContainer.appendChild(movieImg);
         movieContainer.appendChild(movieBtn);
         container.appendChild(movieContainer);
+
     });
     
 }
@@ -197,3 +227,12 @@ getRealatedMovies = async (id) => {
     const relatedMovies = data.results;
     createMovies(relatedMovies, relatedMoviesContainer);
 };
+
+function getLikedMovies() {
+    const likedMovies = likedMoviesList();
+    const moviesArray = Object.values(likedMovies);
+  
+    createMovies(moviesArray, likedMoviesListArticle, { lazyLoad: true, clean: true });
+    
+    console.log(likedMovies)
+  }

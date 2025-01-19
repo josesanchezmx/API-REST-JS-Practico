@@ -140,33 +140,34 @@ button {
   margin: 0px;
   padding: 0px;
 }
-/* Botón predeterminado (no likado, morado) */
+/* Botón predeterminado (no likado, fondo gris/blanco) */
 .movie-btn {
-  background-color: var(--purple-light-2);
-  box-shadow: 0px 0px 10px 2px var(--purple-dark-1);
+  background-color: #f0f0f0; /* Gris claro */
+  box-shadow: 0px 0px 10px 2px #cccccc; /* Sombra suave */
   border: none;
-  border-radius: 50%; /* Redondeado para un diseño moderno */
+  border-radius: 50%; /* Diseño redondeado */
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease; /* Transiciones suaves */
 }
 
 .movie-btn::before {
-  content: '💜'; /* Icono de corazón morado */
+  content: '🤍'; /* Icono de corazón blanco/gris */
   font-size: 20px;
-  color: white;
-  transition: all 0.3s ease;
+  color: #888888; /* Gris oscuro */
+  transition: all 0.3s ease; /* Transición para el icono */
 }
 
-/* Botón en estado "liked" (blanco) */
+/* Botón en estado "liked" (rojo) */
 .movie-btn--liked {
-  background-color: #ffffff; /* Fondo blanco */
-  box-shadow: 0px 0px 10px 2px #cccccc; /* Sombra más sutil */
+  background-color: #ff0000; /* Fondo rojo */
+  box-shadow: 0px 0px 10px 2px #cc0000; /* Sombra más intensa */
 }
 
 .movie-btn--liked::before {
-  content: '🤍'; /* Icono de corazón blanco */
-  color: var(--purple-dark-1);
+  content: '❤️'; /* Icono de corazón rojo */
+  color: white; /* Color del corazón */
 }
+
 
 
 .categoriesPreview-list, .categories-list {
