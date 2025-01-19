@@ -31,22 +31,38 @@ function createMovies(movies, container, {lazyLoad = false, clean = true,} = {},
         const movieContainer = document.createElement('div');   
         movieContainer.classList.add('movie-container');
         
-        movieContainer.addEventListener('click', () => {
-            location.hash = `#movie=${movie.id}`;
-        });
-
         const movieImg = document.createElement('img');
         movieImg.classList.add('movie-img');
         movieImg.setAttribute('alt', movie.title);
         movieImg.setAttribute(lazyLoad ? 'data-img': 'src', movieImgUrl);
 
-        if (lazyLoad) {
+        //Agregar evento para redirigir al detalle de la película
+        movieImg.addEventListener('click', () => {
+            location.hash = `#movie=${movie.id}`
+        });
+
+        // Aquí deberías guardar la película en Local Storage
+        movieBtn.addEventListener('click', () => {
+            movieBtn.classList.toggle('movie-btn--liked');
+            // Aquí deberías guardar la película en Local Storage
+        });
+
+        const movieBtn = document.createElement('button');
+        movieBtn.classList.add('movie-btn');
+        movieBtn.addEventListener('click', () => {
+            movieBtn.classList.toggle('movie-btn--liked')
+            //DEVERIAMOS AGREGAR LA PELICULA A LOCAL STORAGE
+
+        });
+          // CAMBIO: Verificar si lazyLoad está habilitado y observar la imagen
+          if (lazyLoad) {
             lazyLoader.observe(movieImg);
         }
 
+        // Añadir elementos al contenedor de la película
         movieContainer.appendChild(movieImg);
+        movieContainer.appendChild(movieBtn);
         container.appendChild(movieContainer);
-
     });
     
 }
