@@ -102,8 +102,7 @@ function createCategories(categories, container) {
     container.innerHTML = '';
 
     categories.forEach(category => {
-        const categoriesPreviewList = document.querySelector
-        ('#categoriesPreview .categoriesPreview-list');
+        const categoriesPreviewList = document.querySelector('#categoriesPreview .categoriesPreview-list');
 
         const categoryContainer = document.createElement('div');
         categoryContainer.classList.add('category-container');
@@ -131,14 +130,22 @@ function createCategories(categories, container) {
 
 
 async function getTrendingMoviesPreview(){
-    const {data} = await api('trending/movie/day');
+    const {data} = await api('trending/movie/day',{
+        params: {
+            language: lang,
+        }
+    });
     const movies = data.results;
     createMovies(movies, trendingMoviesPreviewList, true);
 }
 
 // lista de categorias de peiculas
 async function getCategoriesPreview() {
-    const { data } = await api('genre/movie/list');
+    const { data } = await api('genre/movie/list',{
+        params: {
+            language: lang,
+        }
+    });
     const categories = data.genres;
 
     createCategories(categories, categoriesPreviewList);
@@ -150,6 +157,7 @@ async function getMoviesByCategory(id) {
     const { data } = await api('discover/movie', {
       params: {
         with_genres: id,
+        language: lang,
       },
     });
     const movies = data.results;
@@ -161,6 +169,8 @@ async function getMoviesBySearch(query) {
     const { data } = await api('search/movie', {
       params: {
         query,
+        language: lang,
+        
       },
     });
     const movies = data.results;
@@ -170,7 +180,12 @@ async function getMoviesBySearch(query) {
  
 
   async function getTrendingMovies() {
-      const { data } = await api('trending/movie/day');
+      const { data } = await api('trending/movie/day',{
+        params: {
+            language: lang,
+
+        }
+      });
       const movies = data.results;
       createMovies(movies, genericSection, { lazyLoad: true, clean: false });
   
@@ -185,6 +200,7 @@ async function getMoviesBySearch(query) {
       const { data } = await api('trending/movie/day', {
           params: {
               page,
+              language: lang,
           },
       });
       const movies = data.results;
@@ -223,7 +239,11 @@ async function getMovieById(id){
 }
 
 getRealatedMovies = async (id) => {
-    const { data } = await api(`movie/${id}/recommendations`);
+    const { data } = await api(`movie/${id}/recommendations`,{
+        params: {
+            language: lang,
+        }
+    });
     const relatedMovies = data.results;
     createMovies(relatedMovies, relatedMoviesContainer);
 };

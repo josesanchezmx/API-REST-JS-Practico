@@ -1,4 +1,62 @@
- let page = 1;
+let page = 1;
+let lang = "es";
+
+const countries = [
+  {
+    name: "mex",
+    language: "es-MX",
+    flag: "🇲🇽",
+
+  },
+  {
+    name: "usa",
+    language: "en-US",
+    flag: '🇺🇸',
+  },
+  {
+    name: "rus",
+    language: "ru",
+    flag: "🇷🇺",
+  },
+  {
+    name: "ger",
+    language: "de",
+    flag: "🇩🇪",
+  },
+  {
+    name: "fra",
+    language: "fr",
+    flag: "🇫🇷"
+  },
+  {
+    name: "chn",
+    language: "zh",
+    flag: "🇨🇳",
+  },
+];
+
+
+async function getLanguages() {
+  countries.forEach((country) => {
+    const languageOption = document.createElement('option');
+    languageOption.setAttribute('value', country.language);
+    languageOption.setAttribute('for', 'language');
+    const languageText = document.createTextNode(country.flag);
+    languageOption.appendChild(languageText);
+    languageOptions.appendChild(languageOption);
+  });
+};
+getLanguages()
+
+// listeners
+languageOptions.addEventListener("change", (event) => {
+  lang = event.target.value;
+  console.log(lang);
+  homePage();
+});
+
+
+
 searchFormBtn.addEventListener('click', () => {
   location.hash = '#search=' + searchFormInput.value;
 });
@@ -45,6 +103,7 @@ function homePage() {
   headerTitle.classList.remove('inactive');
   headerCategoryTitle.classList.add('inactive');
   searchForm.classList.remove('inactive');
+  languageOptions.classList.remove("inactive");
 
   // Mostrar secciones principales
   trendingPreviewSection.classList.remove('inactive');
@@ -78,6 +137,7 @@ function categoriesPage() {
   headerTitle.classList.add('inactive');
   headerCategoryTitle.classList.remove('inactive');
   searchForm.classList.add('inactive');
+  languageOptions.classList.add("inactive");
 
   trendingPreviewSection.classList.add('inactive');
   categoriesPreviewSection.classList.add('inactive');
@@ -93,7 +153,7 @@ function categoriesPage() {
   const decodedCategoryName = decodeURIComponent(categoryName);
 
   headerCategoryTitle.innerHTML = decodedCategoryName;
-  
+
   getMoviesByCategory(categoryId);
 
   // Desplazarse al inicio
@@ -109,6 +169,7 @@ function movieDetailsPage() {
   headerTitle.classList.add('inactive');
   headerCategoryTitle.classList.add('inactive');
   searchForm.classList.add('inactive');
+  languageOptions.classList.add("inactive");
 
   trendingPreviewSection.classList.add('inactive');
   categoriesPreviewSection.classList.add('inactive');
@@ -119,7 +180,7 @@ function movieDetailsPage() {
   // ['#movie', '2314']
   const [_, movieId] = location.hash.split('=');
   getMovieById(movieId);
-  
+
 }
 
 function searchPage() {
@@ -131,6 +192,7 @@ function searchPage() {
   headerTitle.classList.add('inactive');
   headerCategoryTitle.classList.add('inactive');
   searchForm.classList.remove('inactive');
+  languageOptions.classList.add("inactive");
 
   trendingPreviewSection.classList.add('inactive');
   categoriesPreviewSection.classList.add('inactive');
@@ -158,6 +220,7 @@ function trendsPage() {
   headerTitle.classList.add('inactive');
   headerCategoryTitle.classList.remove('inactive');
   searchForm.classList.add('inactive');
+  languageOptions.classList.add("inactive");
 
   trendingPreviewSection.classList.add('inactive');
   categoriesPreviewSection.classList.add('inactive');
